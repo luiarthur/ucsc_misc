@@ -1,6 +1,7 @@
 \documentclass[mathserif,t]{beamer}
 %\usepackage{Sweave}                                                       
 %http://tex.stackexchange.com/questions/105613/footer-in-beamer. Check this out. Frankfurt template.
+%http://tex.stackexchange.com/questions/39345/piecewise-highlighting-in-beamer-presentation
 \usepackage{amssymb,bm,mathtools,amsmath}                                                      
 \usepackage{graphicx,caption,float}
 \usepackage[UKenglish]{isodate} % for: \today                             
@@ -47,6 +48,7 @@
       font=scriptsize,
       labelfont={bf,figcol,scriptsize}%,textfont={black}
     }
+  \def\hline{ \textcolor{grey}{\hrulefill}\\ }
 
   % Beamer Footer Stuff:
   %http://tex.stackexchange.com/questions/26476/add-footer-text-to-all-slides-in-beamer
@@ -60,10 +62,25 @@
       \end{beamercolorbox}
     }
   }
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% defs:
-  \def\bucket{ \underline{|~~~|} }
+%%%%% Example for embedding images: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%\frame{
+%%%  \frametitle{How to embed images:}
+%%%  \beginmyfig
+%%%    \includegraphics[scale=.21]{path/to/file.pdf}
+%%%    \caption{Put Caption Here}
+%%%  \endmyfig
+%%%  \footnote{\tiny \url{https://www.luiarthur.github.com} }
+%%%}
+% End of Header. Start below beamer below. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% defs for this assignment:
+  \def\ball{~{\textcolor{orange}{\bullet}~}}
+  \def\urn{~{\textcolor{grey}{\underline{|~~~|}~}}}
+  \def\burn#1{~{\textcolor{grey}{\underline{|#1|}~}}}
+  \def\wall{\textbf|}
+  \def\lol{~~~~~~~~~~}
+  \def\div#1#2{\textcolor{grey}{\underline{|#1\wall#2|}~}}
 
 \begin{document}
 % My Title: {
@@ -81,28 +98,66 @@
   }
 %}
 
-\frame{
+\frame{ %2
   \frametitle{Problem}
   \vspace{15mm}
-  How do you put $n$ balls into $r$ urns? \\
-  $~\bullet~\bullet~\bullet~\bullet~\bullet~\bullet $ $\bucket~\bucket~\bucket$ \\
-
-  %\beginmyfig
-  %  \includegraphics[scale=.21]{../../images/tulipsfieldsinholland6.jpg}
-  %  \includegraphics[scale=.21]{../../images/viceroy.jpg}
-  %  \caption{Tulips popularized in the sixteenth century in Holland. During the 
-  %           tulipomania, a viceroy (right) bulb could allegedly be exchanged for a basket
-  %           of goods, some furniture, \textit{and} some live stock. Today, 9M bulbs
-  %           are produced annually, and tulips account for 25\% of agricultural exports.}
-  %\endmyfig
-  %\footnote{\tiny \url{https://www.luiarthur.github.com} }
+  How many ways can you put $n$ (identical) balls into $r$ (distinct) urns? \\\wl
+  \pause
+  $\ball\ball\ball \rightarrow \urn\urn$ \\\wl
+  \pause
+  $
+  \div{\ball\ball\ball}{~~~} \lol \pause
+  \div{\ball\ball}{\ball} \lol \pause
+  \div{\ball}{\ball\ball} \lol \pause
+  \div{~~~}{\ball\ball\ball}
+  $
+  \pause
+  \wl\wl
+  \textbf{\large Balls and Walls}\\\wl
+  $\ball\ball\ball\wall \pause \lol \ball\ball\wall\ball \lol \ball\wall\ball\ball \lol \wall\ball\ball\ball$ \\\wl
 }
+
+\frame{ %3
+  \frametitle{Algebraic Solution}
+  \vspace{15mm}
+  How many ways can you put $n$ (identical) balls into $r$ (distinct) urns? \\\wl
+  $\ball\ball\ball\wall$ \\\wl \pause
+  $\ds\frac{(n+r-1)!}{n!~~(r-1)!} \pause = {n+r-1 \choose n} $, 
+  where $r-1$ is the number of \textbf{walls}.\\\wl \pause
+  for $n=3$ and $r=2$,
+  \[
+    {n+r-1 \choose n} = {3+2-1 \choose 1} = 4
+  \]
+}
+
+
+\frame{ %4
+  \frametitle{A Slightly More Challenging Problem}
+  \vspace{10mm}
+  How many ways can you put $n$ (identical) balls into $r$ (distinct) urns 
+  if you constrain $k$ \textbf{bins} to be \textbf{nonempty} ($k<$ min$(r,n)$)? \\\wl\pause
+  First, choose $k$ of $r$ bins to be nonempty. \\ \pause
+  Then, place a ball into each of the $k$ chosen bins. \\ \pause
+  Finally, place the remaining $n-k$ balls into the $r$ bins.\\ \pause
+  \[
+    {(n-k)+r-1 \choose n-k} \pause \times \text{\small the number of ways to pick $k$ of $r$ bins to be nonempty}
+  \]
+  \pause
+  \[
+    = {n-k+r-1 \choose n-k} {r \choose k} 
+  \]
+}
+
+
+% End Frame:
 {\setbeamercolor{background canvas}{bg=grey}
   \frame{
     \frametitle{The End}
-    \vspace{30mm}
     \begin{center}
       \color{pumpkin}\Huge \textbf{Questions?}
+      \beginmyfig
+      \includegraphics[scale=.2]{stockings.jpg}
+      \endmyfig
     \end{center} 
   }
 }
